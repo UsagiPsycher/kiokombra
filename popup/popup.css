@@ -1,0 +1,45 @@
+body {
+    width: 600px;
+    height: 400px;
+    margin: 0;
+    padding: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: #2f2f2f;
+    color: #ffffff;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  #output {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    tab-size: 2;
+    overflow: auto;
+    color: #f8f8f2 !important;
+    background: #282a36 !important;
+    height: 1000px;
+  }
+  
+  #copyBtn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  #copyBtn:hover {
+    background: #45a049;
+  }

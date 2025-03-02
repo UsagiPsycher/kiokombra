@@ -1,0 +1,41 @@
+body {
+    width: 600px;
+    min-height: 400px;
+    padding: 15px;
+    font-family: system-ui, sans-serif;
+    background: #1a1a1a;
+    color: #fff;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  #output {
+    flex: 1;
+    padding: 10px;
+    background: #2d2d2d;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    white-space: pre-wrap;
+    resize: none;
+  }
+  
+  #copyBtn {
+    padding: 8px 16px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  #copyBtn:hover {
+    background: #45a049;
+  }

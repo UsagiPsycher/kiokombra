@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Kiokombra - A Notion to Gherkin converter",
+  "version": "1.0",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": [
+    "https://www.notion.so/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": "icons/icon48.png"
+  },
+  "icons": {
+    "48": "icons/icon48.png"
+  }
+}
