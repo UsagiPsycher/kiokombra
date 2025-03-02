@@ -1,45 +1,87 @@
 body {
-    width: 600px;
-    height: 400px;
-    margin: 0;
-    padding: 15px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: #2f2f2f;
-    color: #ffffff;
-  }
-  
-  .container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  #output {
-    font-family: 'Fira Code', 'Courier New', monospace;
-    tab-size: 2;
-    overflow: auto;
-    color: #f8f8f2 !important;
-    background: #282a36 !important;
-    height: 1000px;
-  }
-  
-  #copyBtn {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  
-  #copyBtn:hover {
-    background: #45a049;
-  }
+  width: 600px;
+  height: 400px;
+  margin: 0;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: #1e1e1e;
+  color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #333;
+}
+
+h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+#copyBtn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#copyBtn:hover {
+  background: #43a047;
+  transform: scale(1.05);
+}
+
+#output {
+  font-family: 'Fira Code', 'Courier New', monospace;
+  tab-size: 2;
+  overflow: auto;
+  color: #f8f8f2;
+  background: #282a36;
+  padding: 20px;
+  border-radius: 12px;
+  flex: 1;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre;
+  border: 1px solid #333;
+}
+
+/* Scrollbar styling */
+#output::-webkit-scrollbar {
+  width: 10px;  /* Vertical scrollbar */
+  height: 10px; /* Horizontal scrollbar */
+}
+
+#output::-webkit-scrollbar-track {
+  background: #2e2e2e;
+  border-radius: 8px;
+}
+
+#output::-webkit-scrollbar-thumb {
+  background-color: #4CAF50;
+  border-radius: 8px;
+  border: 2px solid #2e2e2e;
+}
+
+#output::-webkit-scrollbar-thumb:hover {
+  background-color: #43a047;
+}
