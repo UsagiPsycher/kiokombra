@@ -63,12 +63,14 @@ h3 {
   line-height: 1.5;
   white-space: pre;
   border: 1px solid #333;
+  margin: 0;
 }
 
 /* Scrollbar styling */
 #output::-webkit-scrollbar {
   width: 10px;  /* Vertical scrollbar */
-  height: 10px; /* Horizontal scrollbar */
+  height: 8px; /* Horizontal scrollbar */
+  padding: 0;
 }
 
 #output::-webkit-scrollbar-track {
@@ -84,4 +86,8 @@ h3 {
 
 #output::-webkit-scrollbar-thumb:hover {
   background-color: #43a047;
+}
+
+#output::-webkit-scrollbar-corner {
+  background: #2e2e2e;
 }
