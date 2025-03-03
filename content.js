@@ -23,10 +23,10 @@ function extractPageContent() {
         const heading2Element = block.querySelector('h2');
         const heading3Element = block.querySelector('h3');
         const heading4Element = block.querySelector('h4');
-        const textElement = block.querySelector('.notranslate:not([class*=" "]):not([placeholder="List"])');
         const tableElement = block.querySelector('.notion-table-block table');
-        const quoteElement = block.querySelector('blockquote');
-        const bulletElement = block.querySelector('.notranslate[placeholder="List"]:not([class*=" "])');
+        var quoteElement = block.classList.contains('notion-quote-block') ? block : null;
+        var textElement = block.classList.contains('notion-text-block') ? block : null;
+        var bulletElement = block.classList.contains('notion-bulleted_list-block') ? block : null;
   
         // Section detection in the Notion content
         if (heading2Element) {
