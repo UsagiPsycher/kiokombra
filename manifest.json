@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Kiokombra - A Notion to Gherkin converter",
-  "version": "1.0",
+  "version": "1.2",
   "permissions": ["activeTab", "scripting"],
   "host_permissions": [
     "https://www.notion.so/*"
