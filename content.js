@@ -23,7 +23,8 @@ function extractPageContent() {
         const heading2Element = block.querySelector('h2');
         const heading3Element = block.querySelector('h3');
         const heading4Element = block.querySelector('h4');
-        const tableElement = block.querySelector('.notion-table-block table');
+
+        var tableParentElement = block.classList.contains('notion-table-block') ? block : null;
         var quoteElement = block.classList.contains('notion-quote-block') ? block : null;
         var textElement = block.classList.contains('notion-text-block') ? block : null;
         var bulletElement = block.classList.contains('notion-bulleted_list-block') ? block : null;
@@ -86,8 +87,9 @@ function extractPageContent() {
               content: cleanedText
             });
           }
-        } else if (tableElement && isFeatureSectionActive) {
+        } else if (tableParentElement && isFeatureSectionActive) {
           // If a table is found within a Feature section (likely part of a scenario or background)
+          const tableElement = tableParentElement.querySelector('table');
           const rows = Array.from(tableElement.rows).map(row =>
             // Convert each table row into an array of trimmed cell text
             Array.from(row.cells).map(cell => cell.innerText.trim())
