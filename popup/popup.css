@@ -41,7 +41,7 @@ h3 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  background: linear-gradient(45deg, #2dd4bf, #14b8a6);
+  background: linear-gradient(45deg, #b1d198, #7E9E6B);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -49,7 +49,7 @@ h3 {
 }
 
 #copyBtn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #98C379 0%, #6B8C5D 100%);
   color: white;
   border: none;
   padding: 10px 20px;
@@ -61,6 +61,7 @@ h3 {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: relative;
   min-width: 120px;
+  min-height: 45px;
   overflow: hidden;
 }
 
@@ -90,7 +91,7 @@ h3 {
 
 #copyBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 6px 12px rgba(152, 195, 121, 0.3);
 }
 
 #copyBtn:active {
@@ -98,7 +99,7 @@ h3 {
 }
 
 #copyBtn.success {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  background: linear-gradient(135deg, #7E9E6B 0%, #5A7950 100%);
   animation: buttonPop 0.4s ease;
 }
 
@@ -111,11 +112,11 @@ h3 {
 #output {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   flex: 1;
-  background: #212936;
-  color: #f8f8f2;
+  background: #2c313a; 
+  color: #abb2bf; 
   padding: 20px;
   border-radius: 12px;
-  border: 1px solid #334155;
+  border: 1px solid #3a3f4b; 
   overflow: auto;
   white-space: pre-wrap;
   line-height: 1.8;
@@ -135,12 +136,12 @@ h3 {
 }
 
 #output::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, #2dd4bf, #14b8a6);
+  background: #3e4451;
   border-radius: 8px;
 }
 
 #output::-webkit-scrollbar-track {
-  background: rgba(40, 40, 40, 0.4);
+  background: #21252b;
 }
 
 /* Prism.js overrides */
