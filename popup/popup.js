@@ -172,7 +172,7 @@ const PopupController = (() => {
   
     try {
       await navigator.clipboard.writeText(output.textContent);
-      copyBtn.textContent = 'Copied!';
+      copyBtn.textContent = 'Copied! ✓';
       setTimeout(() => {
         copyBtn.textContent = originalText;
       }, 2000); // 2 seconds

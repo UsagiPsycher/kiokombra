@@ -99,7 +99,7 @@ function extractPageContent() {
               content: rows
             });
           }
-        } else if (bulletElement) {
+        } else if (bulletElement && bulletElement.innerText !== '') {
           // If a bullet list item is found (single bullet, treated as a one-column table in Gherkin)
           const monoTableRow = [["Elements"], [bulletElement.innerText.trim()]];
           // Create a single-column table with header 'Elements' and the bullet content as a row
