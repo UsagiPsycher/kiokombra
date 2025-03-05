@@ -32,7 +32,6 @@ function extractPageContent() {
         // Section detection in the Notion content
         if (heading2Element) {
           const heading2Text = heading2Element.innerText.trim().toLowerCase();
-          console.log("h2", heading2Text)
 
           switch (heading2Text) {
             case 'feature':
@@ -45,7 +44,6 @@ function extractPageContent() {
 
         } else if (heading3Element && isRecordingEnabled) {
             const heading3Text = heading3Element.innerText.trim().toLowerCase();
-            console.log("h3", heading3Text)
 
             switch (heading3Text) {
               case 'background':
@@ -57,8 +55,6 @@ function extractPageContent() {
               default:
                 currentSectionType = null;
             }
-            
-            console.log("current section type global", currentSectionType)
 
         } else if (heading4Element && isRecordingEnabled && currentSectionType == 'scenarios') {
             // Within Feature: a new scenario section begins
@@ -73,7 +69,7 @@ function extractPageContent() {
         // Content processing for each block
         if (quoteElement) {
           // If a quote block is found, treat it as a comment (for Gherkin, as a commented step)
-          const cleanedQuote = modifyText(quoteElement.innerText.trim());
+          const cleanedQuote = cleanBlockquoteText(quoteElement);
           if (activeScenario) {
             // Attach comment to current scenario as a commented step
             activeScenario.elements.push({
@@ -149,22 +145,43 @@ function extractPageContent() {
    * - Removes the first newline character.
    * - Adds two spaces after each remaining newline (for Gherkin comment indentation).
    */
-  function modifyText(textElement) {
-    // Remove the first newline character (if present)
-    let firstNewlineIndex = textElement.indexOf('\n');
-    if (firstNewlineIndex !== -1) {
-      textElement = textElement.slice(0, firstNewlineIndex) + textElement.slice(firstNewlineIndex + 1);
-    }
-  
-    // Prefix every newline in the text with two spaces (for nested comment formatting)
-    textElement = textElement.replace(/\n/g, '\n  ');
-  
-    return textElement;
-  }
-  
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "getContent") {
-      sendResponse(extractPageContent());
+
+function getCleanText(node) {
+  let result = '';
+
+  node.childNodes.forEach(child => {
+    if (child.nodeType === Node.TEXT_NODE) {
+      // Just add the text directly
+      result += child.textContent;
+    } else if (child.nodeType === Node.ELEMENT_NODE) {
+      const tagName = child.tagName.toLowerCase();
+      
+      // Recursively get text from child nodes
+      const childText = getCleanText(child);
+
+      if (tagName === 'div' || tagName === 'p' || tagName === 'blockquote' || tagName === 'br') {
+        // Add a line break after block-level elements or <br>
+        result += childText + '\n';
+      } else {
+        // Inline elements (like <a>) just append their text without line breaks
+        result += childText;
+      }
     }
   });
+
+  return result;
+}
+
+function cleanBlockquoteText(blockquote) {
+  const text = getCleanText(blockquote);
   
+  // Clean up multiple line breaks and trim
+  return text.replace(/\n{2,}/g, '\n').replace(/\n/g, '\n  ');
+}
+  
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "getContent") {
+    sendResponse(extractPageContent());
+  }
+});
