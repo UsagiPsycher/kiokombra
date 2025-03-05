@@ -17,6 +17,7 @@ function extractPageContent() {
       let currentSectionType = null;
       let activeScenario = null;
       let isRecordingEnabled = false;
+      let monoTableHeader = "Elements";
   
       // Process all content blocks on the Notion page
       pageContentElement.querySelectorAll('[data-block-id]').forEach(block => {
@@ -99,6 +100,8 @@ function extractPageContent() {
                 type: 'step',
                 content: cleanedText
               });
+
+              monoTableHeader = extractMonoTableHeader(cleanedText)
             }
           }
 
@@ -121,7 +124,7 @@ function extractPageContent() {
 
           else if (bulletElement && bulletElement.innerText !== '') {
           // If a bullet list item is found (single bullet, treated as a one-column table in Gherkin)
-          const monoTableRow = [["Elements"], [bulletElement.innerText.trim()]];
+          const monoTableRow = [[monoTableHeader], [bulletElement.innerText.trim()]];
           // Create a single-column table with header 'Elements' and the bullet content as a row
           if (currentSectionType === 'scenarios' && activeScenario) {
             // Attach this single-column table to the current scenario's elements
@@ -177,6 +180,33 @@ function cleanBlockquoteText(blockquote) {
   
   // Clean up multiple line breaks and trim
   return text.replace(/\n{2,}/g, '\n').replace(/\n/g, '\n  ');
+}
+
+function extractMonoTableHeader(step_sentence) {
+  const regex = /\bfollowing\b\s+(.+)/i;
+  const match = step_sentence.match(regex);
+
+  if (!match) return "Elements"; // "following" not found
+
+  const words = match[1].split(/\s+/); // Split the words after "following"
+  const collectedWords = [];
+  
+  for (const word of words) {
+    collectedWords.push(word);
+    if (/s\b/i.test(word)) { // Stop if a word ends with "s"
+      break;
+    }
+  }
+
+  // If no words or no word ends with "s", return "Elements"
+  if (collectedWords.length === 0 || !/s\b/i.test(collectedWords[collectedWords.length - 1])) {
+    return "Elements";
+  }
+
+  // Capitalize first word
+  collectedWords[0] = collectedWords[0][0].toUpperCase() + collectedWords[0].slice(1);
+
+  return collectedWords.join(' ').replace(':', '');
 }
   
 
