@@ -16,7 +16,7 @@ function extractPageContent() {
   
       let currentSectionType = null;
       let activeScenario = null;
-      let isFeatureSectionActive = false;
+      let isRecordingEnabled = false;
   
       // Process all content blocks on the Notion page
       pageContentElement.querySelectorAll('[data-block-id]').forEach(block => {
@@ -24,35 +24,50 @@ function extractPageContent() {
         const heading3Element = block.querySelector('h3');
         const heading4Element = block.querySelector('h4');
 
-        var tableParentElement = block.classList.contains('notion-table-block') ? block : null;
-        var quoteElement = block.classList.contains('notion-quote-block') ? block : null;
-        var textElement = block.classList.contains('notion-text-block') ? block : null;
-        var bulletElement = block.classList.contains('notion-bulleted_list-block') ? block : null;
+        let tableParentElement = block.classList.contains('notion-table-block') ? block : null;
+        let quoteElement = block.classList.contains('notion-quote-block') ? block : null;
+        let textElement = block.classList.contains('notion-text-block') ? block : null;
+        let bulletElement = block.classList.contains('notion-bulleted_list-block') ? block : null;
   
         // Section detection in the Notion content
         if (heading2Element) {
-          const headerText = heading2Element.innerText.trim();
-          if (headerText === 'Feature') {
-            // Entering the "Feature" section of the page
-            isFeatureSectionActive = true;
-          } else {
-            // Leaving feature-related sections
-            currentSectionType = null;
+          const heading2Text = heading2Element.innerText.trim().toLowerCase();
+          console.log("h2", heading2Text)
+
+          switch (heading2Text) {
+            case 'feature':
+            case 'user story':
+              isRecordingEnabled = true;
+              break;
+            default:
+              isRecordingEnabled = false;
           }
-        } else if (heading3Element && isFeatureSectionActive) {
-          const newHeaderText = heading3Element.innerText.trim();
-          if (newHeaderText === 'Background') {
-            // Within Feature: start collecting "Background" steps
-            currentSectionType = 'background';
-          }
-        } else if (heading4Element && isFeatureSectionActive) {
-          // Within Feature: a new scenario section begins
-          currentSectionType = 'scenario';
-          activeScenario = {
-            name: heading4Element.innerText.trim(),
-            elements: [] // Track both steps and tables in order for this scenario
-          };
-          content.scenarios.push(activeScenario);
+
+        } else if (heading3Element && isRecordingEnabled) {
+            const heading3Text = heading3Element.innerText.trim().toLowerCase();
+            console.log("h3", heading3Text)
+
+            switch (heading3Text) {
+              case 'background':
+                currentSectionType = 'background';
+                break;
+              case 'scenarios':
+                currentSectionType = 'scenarios';
+                break;
+              default:
+                currentSectionType = null;
+            }
+            
+            console.log("current section type global", currentSectionType)
+
+        } else if (heading4Element && isRecordingEnabled && currentSectionType == 'scenarios') {
+            // Within Feature: a new scenario section begins
+
+            activeScenario = {
+              name: heading4Element.innerText.trim(),
+              elements: [] // Track both steps and tables in order for this scenario
+            };
+            content.scenarios.push(activeScenario);
         }
   
         // Content processing for each block
@@ -69,43 +84,50 @@ function extractPageContent() {
             // If not in a scenario, add as a top-level comment (with two-space indent for Gherkin)
             content.comments.push(`  ${cleanedQuote}`);
           }
+
         } else if (textElement) {
-          // If a regular text block is found
-          const cleanedText = textElement.innerText
-            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Remove hyperlink formatting, keep text
-            .replace(/\n/g, '')                       // Remove any newline characters
-            .trim();
-          if (currentSectionType === 'background') {
-            // Add to Background section if within the background context (ignore section titles)
-            if (!['Background', 'Scenarios'].includes(cleanedText)) {
+            // If a regular text block is found
+            const cleanedText = textElement.innerText
+              .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Remove hyperlink formatting, keep text
+              .replace(/\n/g, '')                       // Remove any newline characters
+              .trim();
+
+            if (currentSectionType === 'background') {
+              // Add to Background section if within the background context
               content.background.push(cleanedText);
             }
-          } else if (activeScenario && cleanedText.match(/^(Given|When|Then|And)/i)) {
-            // If in a scenario and text starts with a Gherkin step keyword, record it as a step
-            activeScenario.elements.push({
-              type: 'step',
-              content: cleanedText
-            });
+
+            else if (currentSectionType === 'scenarios' && activeScenario && cleanedText.match(/^(Given|When|Then|And)/i)) {
+              // If in a scenario and text starts with a Gherkin step keyword, record it as a step
+              activeScenario.elements.push({
+                type: 'step',
+                content: cleanedText
+              });
+            }
           }
-        } else if (tableParentElement && isFeatureSectionActive) {
-          // If a table is found within a Feature section (likely part of a scenario or background)
-          const tableElement = tableParentElement.querySelector('table');
-          const rows = Array.from(tableElement.rows).map(row =>
-            // Convert each table row into an array of trimmed cell text
-            Array.from(row.cells).map(cell => cell.innerText.trim())
-          );
-          if (activeScenario) {
-            // Attach the table (as a 2D array) to the current scenario's elements
-            activeScenario.elements.push({
-              type: 'table',
-              content: rows
-            });
+
+          else if (tableParentElement && isRecordingEnabled) {
+            // If a table is found within a Feature section (likely part of a scenario or background)
+            const tableElement = tableParentElement.querySelector('table');
+            const rows = Array.from(tableElement.rows).map(row =>
+              // Convert each table row into an array of trimmed cell text
+              Array.from(row.cells).map(cell => cell.innerText.trim())
+            );
+
+            if (currentSectionType === 'scenarios' && activeScenario) {
+              // Attach the table (as a 2D array) to the current scenario's elements
+              activeScenario.elements.push({
+                type: 'table',
+                content: rows
+              });
+            }
           }
-        } else if (bulletElement && bulletElement.innerText !== '') {
+
+          else if (bulletElement && bulletElement.innerText !== '') {
           // If a bullet list item is found (single bullet, treated as a one-column table in Gherkin)
           const monoTableRow = [["Elements"], [bulletElement.innerText.trim()]];
           // Create a single-column table with header 'Elements' and the bullet content as a row
-          if (activeScenario) {
+          if (currentSectionType === 'scenarios' && activeScenario) {
             // Attach this single-column table to the current scenario's elements
             activeScenario.elements.push({
               type: 'mono-table',
