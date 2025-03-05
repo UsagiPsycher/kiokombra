@@ -114,10 +114,11 @@ const GherkinConverter = (() => {
   function getErrorMessage(type) {
     const messages = {
       invalidContent: (
-        'Error: Content has invalid values\n\n'
+        'Error: Content has invalid values\n\n' +
+        "You sure you're on a Notion page ? 🤔"
       ),
       missingContent: (
-        'Error: Could not retrieve content from current page\n\n' +
+        'Error: Could not retrieve content from current page 🤔\n\n' +
         '1. Ensure you\'re on a valid Notion page\n' +
         '2. Refresh the page and try again'
       ),
