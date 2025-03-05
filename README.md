@@ -33,7 +33,7 @@ Kiokombra is designed to work on specific sites, like Notion. Make sure the exte
 ---
 
 ## 🛠️ How to Use
-1. Open any supported Notion page (for example, one containing a feature description).
+1. Open any supported Notion page (Documentation on how to write features on Notion will come soon)
 2. Click the **Kiokombra** icon in your toolbar.
 3. A popup will appear displaying the extracted Gherkin code.
 4. Review the output with proper syntax highlighting.
